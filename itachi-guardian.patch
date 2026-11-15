@@ -1,0 +1,130 @@
+diff -ruN pa/projects/NarutoSenki/Classes/CharacterBase.cpp pb/projects/NarutoSenki/Classes/CharacterBase.cpp
+--- pa/projects/NarutoSenki/Classes/CharacterBase.cpp	2026-11-15 12:58:14.310075962 +0000
++++ pb/projects/NarutoSenki/Classes/CharacterBase.cpp	2026-11-15 12:58:14.371200782 +0000
+@@ -2899,7 +2899,7 @@
+ 
+ 	clone->setPosition(Vec2(getPositionX() + (_isFlipped ? -32 : 32), getPositionY() - 1));
+ 
+-	if ((getName() == HeroEnum::SageNaruto || getName() == HeroEnum::Naruto) ||
++	if ((getName() == HeroEnum::SageNaruto || getName() == HeroEnum::Naruto || getName() == HeroEnum::Itachi) ||
+ 		(getName() == HeroEnum::RikudoNaruto && cloneTime == 10))
+ 	{
+ 		clone->setHPValue(getHP(), false);
+@@ -4812,9 +4812,12 @@
+ 			target->_isVisable && !target->_isInvincible)
+ 		{
+ 			// float gardZone
++			// GUARD_ADVANCE_TILES: seberapa jauh (dalam tile) penjaga mau maju
++			// mengejar musuh dari posisi aslinya. 0 = perilaku asli.
++			const float GUARD_ADVANCE_TILES = 15;
+ 			bool found = getGameLayer()->playerGroup == Group::Konoha
+-							 ? target->getPositionX() >= 81 * 32
+-							 : target->getPositionX() <= 14 * 32;
++							 ? target->getPositionX() >= (81 - GUARD_ADVANCE_TILES) * 32
++							 : target->getPositionX() <= (14 + GUARD_ADVANCE_TILES) * 32;
+ 			if (found)
+ 			{
+ 				findSome = true;
+diff -ruN pa/projects/NarutoSenki/Classes/Core/Provider.hpp pb/projects/NarutoSenki/Classes/Core/Provider.hpp
+--- pa/projects/NarutoSenki/Classes/Core/Provider.hpp	2026-11-15 12:58:14.296681029 +0000
++++ pb/projects/NarutoSenki/Classes/Core/Provider.hpp	2026-11-15 12:58:14.368845956 +0000
+@@ -43,6 +43,7 @@
+ #include "Shinobi/Bunshin/NarutoClone.hpp"
+ #include "Shinobi/Bunshin/SageNarutoClone.hpp"
+ #include "Shinobi/Bunshin/RikudoNarutoClone.hpp"
++#include "Shinobi/Bunshin/ItachiClone.hpp"
+ 
+ // Guardian
+ // Han, Roshi
+@@ -95,7 +96,7 @@
+ 		is("Hinata") 						ptr = new Hinata();
+ 		is("Hiruzen") 						ptr = new Hiruzen();
+ 		is("Ino") 							ptr = new Ino();
+-		is("Itachi") 						ptr = new Itachi();
++		is("Itachi") 						is_role(Role::Clone) ptr = new ItachiClone();		else ptr = new Itachi();
+ 		is_or("Jiraiya", "SageJiraiya") 	ptr = new Jiraiya();
+ 		is("Jugo") 							ptr = new Jugo();
+ 		is("Kakashi") 						ptr = new Kakashi();
+diff -ruN pa/projects/NarutoSenki/Classes/Core/Shinobi/Bunshin/ItachiClone.hpp pb/projects/NarutoSenki/Classes/Core/Shinobi/Bunshin/ItachiClone.hpp
+--- pa/projects/NarutoSenki/Classes/Core/Shinobi/Bunshin/ItachiClone.hpp	1970-01-01 00:00:00.000000000 +0000
++++ pb/projects/NarutoSenki/Classes/Core/Shinobi/Bunshin/ItachiClone.hpp	2026-11-15 12:58:14.320258928 +0000
+@@ -0,0 +1,46 @@
++#pragma once
++#include "Hero.hpp"
++
++// Klon Itachi.
++// Beda dengan NarutoClone (flog -> hero -> tower), klon ini
++// memprioritaskan HERO dulu, lalu flog, lalu tower.
++class ItachiClone : public Hero
++{
++	void perform() override
++	{
++		if (notFindHero(0))
++		{
++			if (notFindFlog(0))
++			{
++				if (notFindTower(0))
++				{
++					_mainTarget = nullptr;
++				}
++			}
++		}
++
++		if (_mainTarget)
++		{
++			Vec2 moveDirection;
++			Vec2 sp = getDistanceToTarget();
++
++			if (abs(sp.x) > 32 || abs(sp.y) > 32)
++			{
++				moveDirection = sp.getNormalized();
++				walk(moveDirection);
++			}
++			else
++			{
++				if (isFreeState())
++				{
++					changeSide(sp);
++					attack(NAttack);
++				}
++			}
++
++			return;
++		}
++
++		stepOn();
++	}
++};
+diff -ruN pa/projects/NarutoSenki/Classes/Core/Shinobi/Itachi.hpp pb/projects/NarutoSenki/Classes/Core/Shinobi/Itachi.hpp
+--- pa/projects/NarutoSenki/Classes/Core/Shinobi/Itachi.hpp	2026-11-15 12:58:14.303337069 +0000
++++ pb/projects/NarutoSenki/Classes/Core/Shinobi/Itachi.hpp	2026-11-15 12:58:14.369252959 +0000
+@@ -1,5 +1,6 @@
+ #pragma once
+ #include "Hero.hpp"
++#include "Shinobi/Bunshin/ItachiClone.hpp"
+ 
+ class Itachi : public Hero
+ {
+@@ -202,6 +203,11 @@
+ 		CharacterBase::resumeAction(dt);
+ 	}
+ 
++	Hero *createClone(int cloneTime) override
++	{
++		return createCloneHero<ItachiClone>(getName());
++	}
++
+ 	void setActionResume() override
+ 	{
+ 		if (_skillChangeBuffValue == 17)
+diff -ruN pa/projects/NarutoSenki/Resources/Unit/Ninja/Itachi/Itachi.xml pb/projects/NarutoSenki/Resources/Unit/Ninja/Itachi/Itachi.xml
+--- pa/projects/NarutoSenki/Resources/Unit/Ninja/Itachi/Itachi.xml	2026-11-15 12:58:14.316667866 +0000
++++ pb/projects/NarutoSenki/Resources/Unit/Ninja/Itachi/Itachi.xml	2026-11-15 12:58:14.371407883 +0000
+@@ -191,6 +191,7 @@
+ 			<e type="setDelay">10</e>
+ 			<e type="setSound">Audio/Itachi/itachi_skill3_1.ogg</e>
+ 			<e type="setTrap">Amaterasu</e>
++			<e type="setClone">10</e>
+ 			<e type="setDelay">10</e>
+ 			<e type="setSound">Audio/Effect/srg.ogg</e>
+ 		</frame>
