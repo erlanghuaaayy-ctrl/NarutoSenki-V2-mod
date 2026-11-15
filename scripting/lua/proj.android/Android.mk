@@ -44,6 +44,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/ \
                     $(LOCAL_PATH)/../../../projects/NarutoSenki/Classes/Core \
                     $(LOCAL_PATH)/../../../projects/NarutoSenki/Classes/MyTools
 
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../external
 LOCAL_WHOLE_STATIC_LIBRARIES := luajit_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
 
