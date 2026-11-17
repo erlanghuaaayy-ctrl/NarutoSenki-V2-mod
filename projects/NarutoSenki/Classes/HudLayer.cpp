@@ -214,13 +214,18 @@ void HudLayer::initHeroInterface()
 	float mScaleX = 1.0f;
 	float mScaleY = 1.0f;
 
+	// Jarak tombol dari tepi layar (dalam poin). Besarkan jika masih terlalu mepet,
+	// kecilkan atau 0 untuk posisi asli.
+	const float UI_MARGIN_X = 24;
+	const float UI_MARGIN_Y = 12;
+
 #if DEBUG || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	mScaleX = winWidth / 570;
 	mScaleY = winHeight / 320;
 	// init the joyStick
 	_joyStick = JoyStick::create();
 	// set relative position in large screen and small screen
-	_joyStick->setPosition(Vec2(mScaleX * 28, mScaleY * 16));
+	_joyStick->setPosition(Vec2(mScaleX * 28 + UI_MARGIN_X, mScaleY * 16 + UI_MARGIN_Y));
 	_joyStick->setDelegate(this);
 	uiBatch->addChild(_joyStick);
 #endif
@@ -429,6 +434,22 @@ void HudLayer::initHeroInterface()
 	else
 		item3Button->setPosition(Vec2(skill1Button->getPositionX() - skill1Button->getContentSize().width - 8, 2));
 	item4Button->setPosition(Vec2(skill2Button->getPositionX() - skill2Button->getContentSize().width - 8, skill2Button->getPositionY()));
+
+	// Geser tombol menjauhi tepi layar
+	auto nudge = [](Node *btn, float dx, float dy)
+	{
+		if (btn)
+		{
+			btn->setPosition(Vec2(btn->getPositionX() + dx, btn->getPositionY() + dy));
+		}
+	};
+	// kelompok kanan: serang, skill, item
+	for (Node *btn : {(Node *)nAttackButton, (Node *)skill1Button, (Node *)skill2Button, (Node *)skill3Button, (Node *)skill4Button, (Node *)skill5Button, (Node *)item2Button, (Node *)item3Button, (Node *)item4Button})
+	{
+		nudge(btn, -UI_MARGIN_X, UI_MARGIN_Y);
+	}
+	// kelompok kiri: item ramen
+	nudge(item1Button, UI_MARGIN_X, UI_MARGIN_Y);
 #else
 	float width = skill1Button->getContentSize().width;
 
