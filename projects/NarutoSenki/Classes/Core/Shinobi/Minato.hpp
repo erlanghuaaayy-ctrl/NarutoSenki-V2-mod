@@ -72,7 +72,7 @@ class Minato : public Hero
 					changeSide(sp);
 					attack(SKILL1);
 				}
-				else if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000)
+				else if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000)
 				{
 					if (abs(sp.x) > 64 || abs(sp.y) > 16)
 					{
@@ -85,7 +85,7 @@ class Minato : public Hero
 
 					return;
 				}
-				else if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+				else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 				{
 					if (abs(sp.x) > 64 || abs(sp.y) > 16)
 					{

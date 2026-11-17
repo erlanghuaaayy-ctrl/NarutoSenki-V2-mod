@@ -22,7 +22,7 @@ class Asuma : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+				if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 				{
 					changeSide(sp);
 					attack(OUGIS1);
@@ -75,7 +75,7 @@ class Asuma : public Hero
 						return;
 					}
 
-					if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000 && !_mainTarget->_isArmored)
+					if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000 && !_mainTarget->_isArmored)
 					{
 						changeSide(sp);
 						attack(OUGIS2);

@@ -31,7 +31,7 @@ class Pain : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game)
+				if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game)
 				{
 					changeSide(sp);
 					attack(OUGIS2);
@@ -42,7 +42,7 @@ class Pain : public Hero
 					changeSide(sp);
 					attack(SKILL1);
 				}
-				if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+				if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 				{
 					if ((abs(sp.x) > 196 || abs(sp.y) > 64))
 					{
@@ -190,14 +190,14 @@ class Pain : public Hero
 					}
 				}
 
-				if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game)
+				if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game)
 				{
 					changeSide(sp);
 
 					attack(OUGIS2);
 					return;
 				}
-				if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+				if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 				{
 					if ((abs(sp.x) > 196 || abs(sp.y) > 64))
 					{

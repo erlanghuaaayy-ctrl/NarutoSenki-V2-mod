@@ -22,7 +22,7 @@ class Orochimaru : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game)
+				if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game)
 				{
 					if (abs(sp.x) > 128 || abs(sp.y) > 16)
 					{
@@ -34,7 +34,7 @@ class Orochimaru : public Hero
 					attack(OUGIS2);
 					return;
 				}
-				else if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+				else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 				{
 					if (abs(sp.x) > 48 || abs(sp.y) > 32)
 					{
@@ -105,7 +105,7 @@ class Orochimaru : public Hero
 						return;
 					}
 
-					if (_isCanOugis1 && !_isControlled && getHpPercent() < 0.9 && _mainTarget->getDEF() < 5000)
+					if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && getHpPercent() < 0.9 && _mainTarget->getDEF() < 5000)
 					{
 						changeSide(sp);
 						attack(OUGIS1);

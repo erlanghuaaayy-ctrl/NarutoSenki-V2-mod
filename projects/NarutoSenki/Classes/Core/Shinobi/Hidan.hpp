@@ -72,7 +72,7 @@ class Hidan : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && !_isArmored)
+				if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && !_isArmored)
 				{
 					if (abs(sp.x) > 48 || abs(sp.y) > 32)
 					{
@@ -119,7 +119,7 @@ class Hidan : public Hero
 						walk(moveDirection);
 						return;
 					}
-					if (_isCanOugis1 && !_isArmored && !_isControlled && _mainTarget->getDEF() < 5000)
+					if (_isCanOugis1 && !shouldHoldUlt() && !_isArmored && !_isControlled && _mainTarget->getDEF() < 5000)
 					{
 						changeSide(sp);
 						attack(OUGIS1);

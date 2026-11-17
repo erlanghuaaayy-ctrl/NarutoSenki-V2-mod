@@ -66,13 +66,13 @@ class Kankuro : public Hero
 					attack(SKILL1);
 					return;
 				}
-				else if (_isCanOugis1 && !_isControlled && !isFound2)
+				else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && !isFound2)
 				{
 					changeSide(sp);
 					attack(OUGIS1);
 					return;
 				}
-				else if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && !isFound3)
+				else if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && !isFound3)
 				{
 					changeSide(sp);
 					attack(OUGIS2);
@@ -122,12 +122,12 @@ class Kankuro : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis1 && !_isControlled && !isFound2)
+				if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && !isFound2)
 				{
 					changeSide(sp);
 					attack(OUGIS1);
 				}
-				else if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && !isFound3)
+				else if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && !isFound3)
 				{
 					changeSide(sp);
 					attack(OUGIS2);

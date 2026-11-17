@@ -57,7 +57,7 @@ class Choji : public Hero
 						return;
 					}
 
-					if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000 && !_isArmored)
+					if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000 && !_isArmored)
 					{
 						changeSide(sp);
 						attack(OUGIS1);
@@ -67,7 +67,7 @@ class Choji : public Hero
 						changeSide(sp);
 						attack(SKILL2);
 					}
-					else if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000 && !_isArmored)
+					else if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000 && !_isArmored)
 					{
 						changeSide(sp);
 						attack(OUGIS2);
@@ -110,12 +110,12 @@ class Choji : public Hero
 					changeSide(sp);
 					attack(SKILL2);
 				}
-				else if (_isCanOugis1 && !_isControlled && isBaseDanger && !_isArmored && _mainTarget->isFlog())
+				else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && isBaseDanger && !_isArmored && _mainTarget->isFlog())
 				{
 					changeSide(sp);
 					attack(OUGIS1);
 				}
-				else if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->isTower() && !_isArmored)
+				else if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->isTower() && !_isArmored)
 				{
 					changeSide(sp);
 					attack(OUGIS2);

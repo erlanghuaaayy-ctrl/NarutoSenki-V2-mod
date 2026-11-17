@@ -139,7 +139,7 @@ class Kakuzu : public Hero
 					attack(SKILL3);
 					return;
 				}
-				else if (_isCanOugis1 && !_isControlled && isSummonAble)
+				else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && isSummonAble)
 				{
 					attack(OUGIS1);
 					return;
@@ -206,7 +206,7 @@ class Kakuzu : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis1 && !_isControlled && !isSummonAble)
+				if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && !isSummonAble)
 				{
 					changeSide(sp);
 					attack(OUGIS1);

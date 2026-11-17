@@ -32,7 +32,7 @@ class Jiraiya : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game)
+				if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game)
 				{
 					changeSide(sp);
 					attack(OUGIS2);
@@ -61,7 +61,7 @@ class Jiraiya : public Hero
 						return;
 					}
 
-					if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+					if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 					{
 						changeSide(sp);
 						attack(OUGIS1);
@@ -177,13 +177,13 @@ class Jiraiya : public Hero
 						return;
 					}
 
-					if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000)
+					if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000)
 					{
 						changeSide(sp);
 						attack(OUGIS2);
 						return;
 					}
-					else if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000)
+					else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000)
 					{
 						changeSide(sp);
 						attack(OUGIS1);

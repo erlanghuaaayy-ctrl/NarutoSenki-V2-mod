@@ -27,7 +27,7 @@ class Konan : public Hero
 					attack(SKILL1);
 					return;
 				}
-				else if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000 && !_mainTarget->_isArmored && _mainTarget->getState() != State::KNOCKDOWN && !_mainTarget->_isSticking && !_isArmored)
+				else if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && _mainTarget->getDEF() < 5000 && !_mainTarget->_isArmored && _mainTarget->getState() != State::KNOCKDOWN && !_mainTarget->_isSticking && !_isArmored)
 				{
 					if ((abs(sp.x) > 48 || abs(sp.y) > 16))
 					{
@@ -96,7 +96,7 @@ class Konan : public Hero
 						return;
 					}
 
-					if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000 && !_isArmored)
+					if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000 && !_isArmored)
 					{
 						changeSide(sp);
 						attack(OUGIS1);
@@ -151,7 +151,7 @@ class Konan : public Hero
 				{
 					useGear(GearType::Gear03);
 				}
-				if (_isCanOugis1 && !_isControlled && !_isArmored && _mainTarget->isFlog() && isBaseDanger)
+				if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && !_isArmored && _mainTarget->isFlog() && isBaseDanger)
 				{
 					changeSide(sp);
 					attack(OUGIS1);

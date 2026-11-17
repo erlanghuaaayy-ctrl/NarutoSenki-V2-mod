@@ -465,6 +465,10 @@ protected:
 	void				removeDamageDisplay(CCNode *damageDisplay);
 
 public:
+	// [AI] Hindari area ulti musuh yang sedang berlangsung (true = sedang menghindar)
+	bool avoidEnemyUlt();
+	// [AI] Tahan ulti jika rekan sudah ulti ke musuh yang sekarat (kecuali bentrok besar / panik)
+	bool shouldHoldUlt();
 	bool hasTempAttackValue1() { return getTempAttackValue1() > 0; }
 	// UI
 	void updateHpBar();

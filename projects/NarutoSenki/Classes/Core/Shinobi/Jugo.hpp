@@ -45,7 +45,7 @@ class Jugo : public Hero
 						return;
 					}
 
-					if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && !_skillChangeBuffValue && _mainTarget->getDEF() < 5000 && !_mainTarget->_isArmored && _mainTarget->getState() != State::KNOCKDOWN && !_mainTarget->_isSticking)
+					if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && !_skillChangeBuffValue && _mainTarget->getDEF() < 5000 && !_mainTarget->_isArmored && _mainTarget->getState() != State::KNOCKDOWN && !_mainTarget->_isSticking)
 					{
 						if (abs(sp.x) > 32 || abs(sp.y) > 32)
 						{
@@ -56,7 +56,7 @@ class Jugo : public Hero
 						changeSide(sp);
 						attack(OUGIS2);
 					}
-					else if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000 && !_skillChangeBuffValue)
+					else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000 && !_skillChangeBuffValue)
 					{
 						if (abs(sp.x) > 32 || abs(sp.y) > 32)
 						{

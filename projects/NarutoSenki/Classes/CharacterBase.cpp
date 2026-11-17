@@ -4943,6 +4943,97 @@ bool CharacterBase::stepBack()
 	}
 }
 
+// [For AI] Hindari ulti musuh: jangan ikut masuk ke area ulti yang sedang berlangsung
+bool CharacterBase::avoidEnemyUlt()
+{
+	// Hanya untuk AI biasa; penjaga dan mode panik (sisa 1 tower) tetap nekat
+	if (isNotCom() || isGuardian() || _isControlled || isBaseDanger ||
+		_isInvincible || _isArmored || !isFreeState())
+	{
+		return false;
+	}
+
+	for (auto h : getGameLayer()->_CharacterArray)
+	{
+		if (h->_group == _group || h->_state == State::DEAD || !h->_isVisable ||
+			h->isClone() || h->isSummon() || h->isKugutsu())
+		{
+			continue;
+		}
+
+		if (h->_state != State::OATTACK && h->_state != State::O2ATTACK)
+		{
+			continue;
+		}
+
+		Vec2 sp = h->getPosition() - getPosition();
+		if (abs(sp.x) < kTileSize * 6 && abs(sp.y) < kTileSize * 3)
+		{
+			auto tileW = getGameLayer()->currentMap->getTileSize().width;
+			auto mapW = getGameLayer()->currentMap->getMapSize().width;
+			if (getPositionX() >= tileW * 2 && getPositionX() <= (mapW - 2) * tileW)
+			{
+				// menjauh dari karakter yang sedang ulti
+				walk(Vec2(sp.x > 0 ? -1 : 1, 0));
+				return true;
+			}
+			return false;
+		}
+	}
+
+	return false;
+}
+
+// [For AI] Tahan ulti agar tidak boros pada musuh yang sudah sekarat
+bool CharacterBase::shouldHoldUlt()
+{
+	// Panik menjaga tower terakhir: ulti bebas dipakai
+	if (isBaseDanger || !_mainTarget)
+	{
+		return false;
+	}
+
+	CharacterBase *target = _mainTarget.get();
+	if (!target->isPlayerOrCom() || target->getHpPercent() >= 0.3f)
+	{
+		return false;
+	}
+
+	int enemyHeroCount = 0;
+	bool allyUltOnTarget = false;
+
+	for (auto h : getGameLayer()->_CharacterArray)
+	{
+		if (h == this || h->_state == State::DEAD || !h->_isVisable ||
+			h->isClone() || h->isSummon() || h->isKugutsu())
+		{
+			continue;
+		}
+
+		Vec2 sp = h->getPosition() - getPosition();
+		if (abs(sp.x) >= kAttackRange)
+		{
+			continue;
+		}
+
+		if (h->_group != _group)
+		{
+			enemyHeroCount++;
+		}
+		else if (h->_state == State::OATTACK || h->_state == State::O2ATTACK)
+		{
+			if (h->_mainTarget.get() == target ||
+				(h->getPosition() - target->getPosition()).getLength() < kTileSize * 4)
+			{
+				allyUltOnTarget = true;
+			}
+		}
+	}
+
+	// Bentrok besar (3 musuh atau lebih di sekitar): ulti boleh dipakai
+	return allyUltOnTarget && enemyHeroCount < 3;
+}
+
 // [For AI] 使AI撤退
 bool CharacterBase::stepBack2()
 {

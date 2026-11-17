@@ -561,6 +561,12 @@ public:
 	/** Perform default AI logic (Hero::perform) */
 	virtual void setAI(float dt)
 	{
+		// Jangan ikut masuk ke area ulti musuh
+		if (avoidEnemyUlt())
+		{
+			return;
+		}
+
 		// Not check nullable reference
 		aiHandler();
 		// proxy->perform(this);

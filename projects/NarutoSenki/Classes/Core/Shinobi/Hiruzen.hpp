@@ -21,7 +21,7 @@ class Hiruzen : public Hero
 
 			if (isFreeState())
 			{
-				if (_isCanOugis2 && !_isControlled && getGameLayer()->_isOugis2Game && !_isArmored && _mainTarget->getHP() < 10000 && !_mainTarget->_isCanGear06)
+				if (_isCanOugis2 && !shouldHoldUlt() && !_isControlled && getGameLayer()->_isOugis2Game && !_isArmored && _mainTarget->getHP() < 10000 && !_mainTarget->_isCanGear06)
 				{
 					if (abs(sp.x) < 32)
 					{
@@ -42,7 +42,7 @@ class Hiruzen : public Hero
 					attack(OUGIS2);
 					return;
 				}
-				else if (_isCanOugis1 && !_isControlled && _mainTarget->getDEF() < 5000 && !_isArmored)
+				else if (_isCanOugis1 && !shouldHoldUlt() && !_isControlled && _mainTarget->getDEF() < 5000 && !_isArmored)
 				{
 					if (abs(sp.x) > 48 || abs(sp.y) > 16)
 					{
