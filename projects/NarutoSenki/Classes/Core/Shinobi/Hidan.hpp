@@ -103,7 +103,7 @@ class Hidan : public Hero
 					attack(SKILL2);
 					return;
 				}
-				else if (enemyCombatPoint > friendCombatPoint && abs(enemyCombatPoint - friendCombatPoint) > 3000 && !_isHealing && !_isControlled && !_isArmored && !_isFound)
+				else if (!isBaseDanger && enemyCombatPoint > friendCombatPoint && abs(enemyCombatPoint - friendCombatPoint) > 3000 && !_isHealing && !_isControlled && !_isArmored && !_isFound)
 				{
 					if (abs(sp.x) < 160)
 						stepBack2();

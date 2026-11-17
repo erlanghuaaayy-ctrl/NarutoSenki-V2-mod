@@ -638,12 +638,10 @@ void GameLayer::checkTower()
 		else
 		{
 			hero->battleCondiction = akatsukiTowerCount - konohaTowerCount;
-			if (_isHardCoreGame)
+			// Sisa 1 tower: tim ini ikut panik di semua mode (dulu hanya HardCore)
+			if (akatsukiTowerCount == 1)
 			{
-				if (akatsukiTowerCount == 1)
-				{
-					hero->isBaseDanger = true;
-				}
+				hero->isBaseDanger = true;
 			}
 		}
 	}
