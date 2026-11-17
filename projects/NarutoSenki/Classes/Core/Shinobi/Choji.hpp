@@ -83,17 +83,11 @@ class Choji : public Hero
 			}
 		}
 
-		if (battleCondiction >= 0)
+		// Dulu: saat tim kalah tower, AI hanya mengejar tower.
+		// Sekarang sama seperti biasa: flog dulu, tower hanya jika tidak ada flog.
+		_mainTarget = nullptr;
+		if (notFindFlogHalf())
 		{
-			_mainTarget = nullptr;
-			if (notFindFlogHalf())
-			{
-				findTowerHalf();
-			}
-		}
-		else
-		{
-			_mainTarget = nullptr;
 			findTowerHalf();
 		}
 
